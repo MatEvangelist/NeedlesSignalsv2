@@ -9,4 +9,18 @@
     <string name="forgetPassword">Esqueceu sua senha?</string>
     <string name="enter">Entrar</string>
     <string name="register">Registrar</string>
+    <string name="next">Próximo</string>
+    <string name="back">Voltar</string>
+    <string name="namePlaceHolder">Nome</string>
+    <string name="nameLabel">Digite o seu nome:</string>
+    <string name="emailPlaceHolder">E-mail</string>
+    <string name="emailLabel">Digite o seu e-mail:</string>
+    <string name="lastNameLabel">Digite seu sobrenome:</string>
+    <string name="lastNamePlaceHolder">Sobrenome</string>
+    <string name="cpfLabel">Digite o seu CPF:</string>
+    <string name="cpfPlaceHolder">CPF</string>
+    <string name="passwordLabel">Digite a senha :</string>
+    <string name="passwordPlaceHolder">Senha</string>
+    <string name="confirmation_passwordLabel">Digite a senha novamente:</string>
+    <string name="confirmation_passwordplaceHolder">Confirmação da Senha</string>
 </resources>

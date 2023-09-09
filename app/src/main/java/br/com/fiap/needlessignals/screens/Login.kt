@@ -70,26 +70,7 @@ fun Login() {
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                buildAnnotatedString {
-                    withStyle(style = ParagraphStyle(lineHeight = 30.sp)) {
-                        withStyle(style = SpanStyle(color = Color.DarkGray)) {
-                            append("Registrando-se no nosso app você esta aceitando nossos ")
-                        }
-                        withStyle(
-                            style = SpanStyle(
-                                fontWeight = FontWeight.Normal,
-                                color = BluePrimary
-                            )
-                        ) {
-                            append("Termos e Politicas de privacidade")
-                        }
-                    }
-                },
 
-                textAlign = TextAlign.Center,
-            )
-            Spacer(modifier = Modifier.height(12.dp))
             OutlinedTextField(
                 value = email,
                 trailingIcon = {
