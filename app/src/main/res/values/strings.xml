@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">NeedlesSignals</string>
+
+    <string name="login">Login</string>
+    <string name="welcome">Bem vindo!</string>
+    <string name="subtitle">Please, provide your information</string>
+    <string name="email">Digite seu email</string>
+    <string name="password">Digite sua senha</string>
+    <string name="forgetPassword">Esqueceu sua senha?</string>
+    <string name="enter">Entrar</string>
+    <string name="register">Registrar</string>
+</resources>
