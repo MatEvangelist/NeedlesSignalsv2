@@ -56,7 +56,7 @@ fun LoginScreen() {
             Image(
                 modifier = Modifier.size(width = 200.dp, height = 130.dp),
                 painter = painterResource(id = R.drawable.hero),
-                contentDescription = "Logotipo"
+                contentDescription = "Logo Needles Signal"
             )
             Spacer(modifier = Modifier.height(5.dp))
 
@@ -102,7 +102,9 @@ fun LoginScreen() {
                 Button(
                     elevation = ButtonDefaults.buttonElevation(2.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        NeedlesSignalsAppRouter.navigateTo(Screen.CadastroScreen)
+                    },
                     modifier = Modifier
                         .width(150.dp)
                         .height(45.dp)

@@ -11,6 +11,7 @@ import br.com.fiap.needlessignals.navigation.Screen
 import br.com.fiap.needlessignals.screens.CadastroScreen
 import br.com.fiap.needlessignals.screens.EsqueceuSenhaScreen
 import br.com.fiap.needlessignals.screens.LoginScreen
+import br.com.fiap.needlessignals.screens.TermoPrivacidadeScreen
 
 @Composable
 fun NeedlesSignalsApp() {
@@ -27,6 +28,10 @@ fun NeedlesSignalsApp() {
 
                 is Screen.CadastroScreen -> {
                     CadastroScreen()
+                }
+
+                is Screen.TermoPrivacidadeScreen -> {
+                    TermoPrivacidadeScreen()
                 }
             }
 

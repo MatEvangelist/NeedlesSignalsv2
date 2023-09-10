@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowForward
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
@@ -43,6 +44,17 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.fiap.needlessignals.R
+import br.com.fiap.needlessignals.components.CheckBoxNewsletterComponent
+import br.com.fiap.needlessignals.components.CheckBoxTermosComponent
+import br.com.fiap.needlessignals.components.EmailTextField
+import br.com.fiap.needlessignals.components.HeadingTextComponent
+import br.com.fiap.needlessignals.components.MyTextField
+import br.com.fiap.needlessignals.components.NormalTextComponent
+import br.com.fiap.needlessignals.components.PasswordTextField
+import br.com.fiap.needlessignals.components.TermsClickableTextComponent
+import br.com.fiap.needlessignals.navigation.NeedlesSignalsAppRouter
+import br.com.fiap.needlessignals.navigation.Screen
+import br.com.fiap.needlessignals.navigation.SystemBackButtonHandler
 import br.com.fiap.needlessignals.ui.theme.BluePrimary
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -109,242 +121,38 @@ fun CadastroScreen() {
             .padding(28.dp)
     ) {
         item {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Cadastro",
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-                textAlign = TextAlign.Center
+            HeadingTextComponent(value = stringResource(R.string.registrar_head))
+            Spacer(modifier = Modifier.height(14.dp))
+            TermsClickableTextComponent(
+                value = "", onTextSelected = {
+                NeedlesSignalsAppRouter.navigateTo(Screen.TermoPrivacidadeScreen)
+            })
+
+            Spacer(modifier = Modifier.height(14.dp))
+            MyTextField(
+                labelValue = stringResource(id = R.string.namePlaceHolder),
+                icon = Icons.Outlined.Person
             )
-            Spacer(modifier = Modifier.height(34.dp))
-
-            Text(
-                buildAnnotatedString {
-                    withStyle(style = ParagraphStyle(lineHeight = 30.sp)) {
-                        withStyle(style = SpanStyle(color = Color.DarkGray)) {
-                            append("Registrando-se no nosso app você esta aceitando nossos ")
-                        }
-                        withStyle(
-                            style = SpanStyle(
-                                fontWeight = FontWeight.Normal,
-                                color = BluePrimary
-                            )
-                        ) {
-                            append("Termos e Politicas de privacidade")
-                        }
-                    }
-                },
-
-                textAlign = TextAlign.Center,
+            MyTextField(
+                labelValue = stringResource(id = R.string.lastNamePlaceHolder),
+                icon = Icons.Outlined.Person
+            )
+            EmailTextField(
+                labelValue = stringResource(id = R.string.emailPlaceHolder),
+                icon =Icons.Outlined.Email
+            )
+            MyTextField(
+                labelValue = stringResource(id = R.string.cpfPlaceHolder),
+                icon = Icons.Outlined.Person
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            PasswordTextField(labelValue = stringResource(id = R.string.passwordPlaceHolder), icon = Icons.Outlined.Lock)
+            PasswordTextField(labelValue = stringResource(id = R.string.confirmation_passwordplaceHolder), icon = Icons.Outlined.Lock)
 
-            Text(text = "Seu nome", textAlign = TextAlign.Start)
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = nome,
-                placeholder = {
-                    Text(text = stringResource(id = R.string.namePlaceHolder))
-                },
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Person,
-                        contentDescription = ""
-                    )
-                },
-                shape = RoundedCornerShape(9.dp),
-                onValueChange = {
-                    nome = it
-                    if (nome.length > 0) nomeError = false
-                },
-                modifier = Modifier.fillMaxWidth(),
-                label = {
-                    Text(text = stringResource(id = R.string.nameLabel))
-                },
-                isError = nomeError,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text
-                ),
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Seu sobrenome", textAlign = TextAlign.Start)
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = sobrenome,
-                placeholder = {
-                    Text(text = stringResource(id = R.string.lastNamePlaceHolder))
-                },
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Person,
-                        contentDescription = ""
-                    )
-                },
-                shape = RoundedCornerShape(9.dp),
-                onValueChange = {
-                    sobrenome = it
-                    if (sobrenome.length > 0) sobrenomeError = false
-                },
-                modifier = Modifier.fillMaxWidth(),
-                label = {
-                    Text(text = stringResource(id = R.string.lastNameLabel))
-                },
-                isError = sobrenomeError,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text
-                ),
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Seu e-mail", textAlign = TextAlign.Start)
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = email,
-                placeholder = {
-                    Text(text = stringResource(id = R.string.emailPlaceHolder))
-                },
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Person,
-                        contentDescription = ""
-                    )
-                },
-                shape = RoundedCornerShape(9.dp),
-                onValueChange = {
-                    email = it
-                    if (email.length > 0) emailError = false
-                },
-                modifier = Modifier.fillMaxWidth(),
-                label = {
-                    Text(text = stringResource(id = R.string.emailLabel))
-                },
-                isError = emailError,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email
-                ),
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Seu CPF", textAlign = TextAlign.Start)
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = cpf,
-                placeholder = {
-                    Text(text = stringResource(id = R.string.cpfPlaceHolder))
-                },
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Person,
-                        contentDescription = ""
-                    )
-                },
-                shape = RoundedCornerShape(9.dp),
-                onValueChange = {
-                    cpf = it
-                    if (cpf.length > 0) cpfError = false
-                },
-                modifier = Modifier.fillMaxWidth(),
-                label = {
-                    Text(text = stringResource(id = R.string.cpfLabel))
-                },
-                isError = cpfError,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                ),
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Sua senha", textAlign = TextAlign.Start)
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = senha,
-                placeholder = {
-                    Text(text = stringResource(id = R.string.passwordPlaceHolder))
-                },
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Lock,
-                        contentDescription = ""
-                    )
-                },
-                shape = RoundedCornerShape(9.dp),
-                onValueChange = {
-                    senha = it
-                    if (senha.length > 0) senhaError = false
-                },
-                modifier = Modifier.fillMaxWidth(),
-                label = {
-                    Text(text = stringResource(id = R.string.passwordLabel))
-                },
-                isError = senhaError,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password
-                ),
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Sua senha novamente", textAlign = TextAlign.Start)
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = confirmacaosenha,
-                placeholder = {
-                    Text(text = stringResource(id = R.string.confirmation_passwordplaceHolder))
-                },
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Lock,
-                        contentDescription = ""
-                    )
-                },
-                shape = RoundedCornerShape(9.dp),
-                onValueChange = {
-                    confirmacaosenha = it
-                    if (confirmacaosenha.length > 0) confirmacaosenhaError = false
-                },
-                modifier = Modifier.fillMaxWidth(),
-                label = {
-                    Text(text = stringResource(id = R.string.confirmation_passwordLabel))
-                },
-                isError = confirmacaosenhaError,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password
-                ),
-            )
+            CheckBoxTermosComponent(value = stringResource(R.string.agree_terms), onTextSelected = {})
+            CheckBoxNewsletterComponent(value = stringResource(R.string.newsletter), onTextSelected = {})
 
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Termos de uso",
-                    color = BluePrimary,
-                    textAlign = TextAlign.Center
-                )
-            }
-            Spacer(modifier = Modifier.height(12.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Checkbox(
-                    checked = termosDeUso,
-                    onCheckedChange = {
-                        termosDeUso = !termosDeUso
-                    }
-                )
-                Text(text = "Li e concordo com os termos de uso.")
-            }
-            Spacer(modifier = Modifier.height(12.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Checkbox(
-                    checked = receberNovidades,
-                    onCheckedChange = {
-                        receberNovidades = !receberNovidades
-                    }
-                )
-                Text(text = "Receber novidades por e-mail.")
-            }
-            Spacer(modifier = Modifier.height(81.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -353,7 +161,9 @@ fun CadastroScreen() {
                 Button(
                     elevation = ButtonDefaults.buttonElevation(2.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        NeedlesSignalsAppRouter.navigateTo(Screen.LoginScreen)
+                    },
                     modifier = Modifier
                         .width(150.dp)
                         .height(45.dp)
@@ -368,7 +178,9 @@ fun CadastroScreen() {
                 Button(
                     elevation = ButtonDefaults.buttonElevation(2.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        NeedlesSignalsAppRouter.navigateTo(Screen.LoginScreen)
+                    },
                     modifier = Modifier
                         .width(150.dp)
                         .height(45.dp)
@@ -381,6 +193,9 @@ fun CadastroScreen() {
                     )
                 }
 
+                SystemBackButtonHandler {
+                    NeedlesSignalsAppRouter.navigateTo(Screen.LoginScreen)
+                }
             }
         }
     }

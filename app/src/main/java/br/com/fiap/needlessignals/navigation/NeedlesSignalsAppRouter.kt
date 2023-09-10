@@ -7,6 +7,7 @@ sealed class Screen {
     object LoginScreen : Screen()
     object CadastroScreen : Screen()
     object EsqueceuSenhaScreen : Screen()
+    object TermoPrivacidadeScreen : Screen()
 
 }
 

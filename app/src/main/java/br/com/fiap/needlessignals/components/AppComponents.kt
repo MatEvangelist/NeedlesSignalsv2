@@ -62,7 +62,6 @@ fun HeadingTextComponent(value: String) {
         textAlign = TextAlign.Center
     )
 }
-
 @Composable
 fun NormalTextComponent(value: String) {
     Text(
@@ -78,6 +77,34 @@ fun NormalTextComponent(value: String) {
         color = TextColor,
         textAlign = TextAlign.Center
 //        color = colorResource(id = R.color.colorText)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyTextField(value: String = "", labelValue: String, icon: ImageVector) {
+    var textValue by remember {
+        mutableStateOf("")
+    }
+
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(componentShapes.small),
+        value = textValue,
+        label = { Text(text = labelValue) },
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Primary,
+            focusedLabelColor = Primary,
+            cursorColor = Primary,
+            containerColor = BgColor
+        ),
+        onValueChange = {
+            textValue = it
+        },
+        leadingIcon = {
+            Icon(imageVector = icon, contentDescription = "")
+        }
     )
 }
 @OptIn(ExperimentalMaterial3Api::class)
@@ -213,6 +240,33 @@ fun ClickableTextComponent(value: String, onTextSelected: (String) -> Unit) {
 }
 
 @Composable
+fun TermsClickableTextComponent(value: String, onTextSelected: (String) -> Unit) {
+    val initialText = "Registrando-se no nosso app você você esta aceitando nossos "
+    val privacyPolicyText = "Termos e Politicas de privacidade"
+
+    val annotatedString = buildAnnotatedString {
+        append(initialText)
+        withStyle(style = SpanStyle(color = Primary)) {
+            pushStringAnnotation(tag = privacyPolicyText, annotation = privacyPolicyText)
+            append(privacyPolicyText)
+        }
+    }
+    ClickableText(
+        text = annotatedString,
+        style = TextStyle(textAlign = TextAlign.Center, fontSize = 17.sp),
+        onClick = { offsett ->
+            annotatedString.getStringAnnotations(offsett, offsett)
+                .firstOrNull()?.also { span ->
+                    Log.d("ClickableTextComponent", "{$span}")
+                    if (span.item == privacyPolicyText) {
+                        onTextSelected(span.item)
+                    }
+                }
+        }
+    )
+}
+
+@Composable
 fun ClickableLoginTextComponent(value: String, onTextSelected: (String) -> Unit) {
     val initialText = stringResource(R.string.forgetPassword)
 
@@ -243,4 +297,82 @@ fun ClickableLoginTextComponent(value: String, onTextSelected: (String) -> Unit)
                     }
                 }
         })
+}
+
+@Composable
+fun CheckBoxTermosComponent(value: String, onTextSelected: (String) -> Unit) {
+    var checkedState by remember {
+        mutableStateOf(false)
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(76.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(checked = checkedState, onCheckedChange = {
+            checkedState = !checkedState
+        })
+        ClickableTermosTextComponent(value = value, onTextSelected)
+    }
+}
+
+@Composable
+fun ClickableTermosTextComponent(value: String, onTextSelected: (String) -> Unit) {
+    val initialText = stringResource(R.string.agree_terms)
+
+    val annotatedString = buildAnnotatedString {
+        append(initialText)
+    }
+
+    ClickableText(text = annotatedString, onClick = {
+            offsett ->
+        annotatedString.getStringAnnotations(offsett, offsett)
+            .firstOrNull()?.also { span ->
+                Log.d("ClickableTermosTextComponent", "{$span}")
+                if ((span.item == initialText)) {
+                    onTextSelected(span.item)
+                }
+            }
+    })
+}
+
+@Composable
+fun CheckBoxNewsletterComponent(value: String, onTextSelected: (String) -> Unit) {
+    var checkedState by remember {
+        mutableStateOf(false)
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(checked = checkedState, onCheckedChange = {
+            checkedState = !checkedState
+        })
+        ClickableNewsletterTextComponent(value = value, onTextSelected)
+    }
+}
+
+@Composable
+fun ClickableNewsletterTextComponent(value: String, onTextSelected: (String) -> Unit) {
+    val initialText = stringResource(R.string.newsletter)
+
+    val annotatedString = buildAnnotatedString {
+        append(initialText)
+    }
+
+    ClickableText(text = annotatedString, onClick = {
+            offsett ->
+        annotatedString.getStringAnnotations(offsett, offsett)
+            .firstOrNull()?.also { span ->
+                Log.d("ClickableNewsletterTextComponent", "{$span}")
+                if ((span.item == initialText)) {
+                    onTextSelected(span.item)
+                }
+            }
+    })
 }
