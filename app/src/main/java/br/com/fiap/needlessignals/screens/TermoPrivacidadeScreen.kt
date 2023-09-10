@@ -50,7 +50,7 @@ fun TermoPrivacidadeScreen() {
             )
             Spacer(modifier = Modifier.height(5.dp))
 
-            HeadingTextComponent(value = stringResource(R.string.recovery_password))
+            HeadingTextComponent(value = stringResource(R.string.term_privacy))
 
             Spacer(modifier = Modifier.height(10.dp))
 
