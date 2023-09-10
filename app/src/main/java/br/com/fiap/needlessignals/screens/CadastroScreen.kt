@@ -146,7 +146,7 @@ fun CadastroScreen() {
                 icon = Icons.Outlined.Person
             )
 
-            PasswordTextField(labelValue = stringResource(id = R.string.passwordPlaceHolder), icon = Icons.Outlined.Lock)
+            PasswordTextField(confirmPassword = true, labelValue = stringResource(id = R.string.passwordPlaceHolder), icon = Icons.Outlined.Lock)
             PasswordTextField(labelValue = stringResource(id = R.string.confirmation_passwordplaceHolder), icon = Icons.Outlined.Lock)
 
             CheckBoxTermosComponent(value = stringResource(R.string.agree_terms), onTextSelected = {})

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -24,14 +25,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -93,6 +97,9 @@ fun MyTextField(value: String = "", labelValue: String, icon: ImageVector) {
             .clip(componentShapes.small),
         value = textValue,
         label = { Text(text = labelValue) },
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+        singleLine = true,
+        maxLines = 1,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Primary,
             focusedLabelColor = Primary,
@@ -110,6 +117,7 @@ fun MyTextField(value: String = "", labelValue: String, icon: ImageVector) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmailTextField(value: String = "", labelValue: String, icon: ImageVector) {
+
     var emailValue by remember {
         mutableStateOf("")
     }
@@ -123,6 +131,9 @@ fun EmailTextField(value: String = "", labelValue: String, icon: ImageVector) {
             .fillMaxWidth()
             .clip(componentShapes.small),
         value = emailValue,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
+        singleLine = true,
+        maxLines = 1,
         label = { Text(text = labelValue) },
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Primary,
@@ -151,7 +162,9 @@ fun EmailTextField(value: String = "", labelValue: String, icon: ImageVector) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasswordTextField(value: String = "", labelValue: String, icon: ImageVector) {
+fun PasswordTextField(confirmPassword: Boolean = false, value: String = "", labelValue: String, icon: ImageVector) {
+    val localFocusManager = LocalFocusManager.current
+
     var password by remember {
         mutableStateOf("")
     }
@@ -160,12 +173,28 @@ fun PasswordTextField(value: String = "", labelValue: String, icon: ImageVector)
         mutableStateOf(false)
     }
 
+    var imeAction = ImeAction.Done
+
+    if (confirmPassword) {
+        imeAction = ImeAction.Next
+    }
+
+
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
             .clip(componentShapes.small),
         value = password,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = imeAction),
+        singleLine = true,
+        maxLines = 1,
+        keyboardActions = KeyboardActions{
+            if (!confirmPassword) {
+                localFocusManager.clearFocus()
+            } else {
+                localFocusManager.moveFocus(focusDirection = FocusDirection.Next)
+            }
+        },
         label = { Text(text = labelValue) },
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Primary,
