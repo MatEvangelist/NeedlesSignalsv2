@@ -3,7 +3,6 @@ package br.com.fiap.needlessignals.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,6 @@ import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,10 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import br.com.fiap.needlessignals.R
 import br.com.fiap.needlessignals.components.EmailTextField
 import br.com.fiap.needlessignals.components.HeadingTextComponent
@@ -65,7 +60,8 @@ fun EsqueceuSenhaScreen() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            EmailTextField(labelValue = "Email", icon = Icons.Outlined.Email)
+            EmailTextField(labelValue = "Email", icon = Icons.Outlined.Email) {
+            }
 
             Spacer(modifier = Modifier.height(81.dp))
 

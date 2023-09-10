@@ -86,7 +86,11 @@ fun NormalTextComponent(value: String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTextField(value: String = "", labelValue: String, icon: ImageVector) {
+fun MyTextField(
+    labelValue: String,
+    icon: ImageVector,
+    onTextSelected: (String) -> Unit
+) {
     var textValue by remember {
         mutableStateOf("")
     }
@@ -108,6 +112,7 @@ fun MyTextField(value: String = "", labelValue: String, icon: ImageVector) {
         ),
         onValueChange = {
             textValue = it
+            onTextSelected(it)
         },
         leadingIcon = {
             Icon(imageVector = icon, contentDescription = "")
@@ -116,7 +121,12 @@ fun MyTextField(value: String = "", labelValue: String, icon: ImageVector) {
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EmailTextField(value: String = "", labelValue: String, icon: ImageVector) {
+fun EmailTextField(
+    value: String = "",
+    labelValue: String,
+    icon: ImageVector,
+    onTextSelected: (String) -> Unit
+) {
 
     var emailValue by remember {
         mutableStateOf("")
@@ -143,7 +153,7 @@ fun EmailTextField(value: String = "", labelValue: String, icon: ImageVector) {
         ),
         onValueChange = {
             emailValue = it
-            if (emailValue.length > 0) emailError = false
+            onTextSelected(it)
         },
         isError = emailError,
         leadingIcon = {
@@ -162,7 +172,12 @@ fun EmailTextField(value: String = "", labelValue: String, icon: ImageVector) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasswordTextField(confirmPassword: Boolean = false, value: String = "", labelValue: String, icon: ImageVector) {
+fun PasswordTextField(
+    confirmPassword: Boolean = false,
+    labelValue: String,
+    icon: ImageVector,
+    onTextSelected: (String) -> Unit
+) {
     val localFocusManager = LocalFocusManager.current
 
     var password by remember {
@@ -204,6 +219,7 @@ fun PasswordTextField(confirmPassword: Boolean = false, value: String = "", labe
         ),
         onValueChange = {
             password = it
+            onTextSelected(it)
         },
         leadingIcon = {
             Icon(imageVector = icon, contentDescription = "")

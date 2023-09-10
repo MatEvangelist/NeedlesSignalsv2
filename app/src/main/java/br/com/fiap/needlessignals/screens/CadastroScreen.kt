@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowForward
@@ -20,38 +18,26 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.ParagraphStyle
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.fiap.needlessignals.R
 import br.com.fiap.needlessignals.components.CheckBoxNewsletterComponent
 import br.com.fiap.needlessignals.components.CheckBoxTermosComponent
 import br.com.fiap.needlessignals.components.EmailTextField
 import br.com.fiap.needlessignals.components.HeadingTextComponent
 import br.com.fiap.needlessignals.components.MyTextField
-import br.com.fiap.needlessignals.components.NormalTextComponent
 import br.com.fiap.needlessignals.components.PasswordTextField
 import br.com.fiap.needlessignals.components.TermsClickableTextComponent
+import br.com.fiap.needlessignals.data.LoginViewModel
+import br.com.fiap.needlessignals.data.UIEvent
 import br.com.fiap.needlessignals.navigation.NeedlesSignalsAppRouter
 import br.com.fiap.needlessignals.navigation.Screen
 import br.com.fiap.needlessignals.navigation.SystemBackButtonHandler
@@ -59,62 +45,7 @@ import br.com.fiap.needlessignals.ui.theme.BluePrimary
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun CadastroScreen() {
-    var termosDeUso by remember {
-        mutableStateOf(false)
-    }
-    var receberNovidades by remember {
-        mutableStateOf(false)
-    }
-
-    var nome by remember() {
-        mutableStateOf("")
-    }
-
-    var nomeError by remember {
-        mutableStateOf(false)
-    }
-
-    var sobrenome by remember() {
-        mutableStateOf("")
-    }
-
-    var sobrenomeError by remember {
-        mutableStateOf(false)
-    }
-
-    var email by remember() {
-        mutableStateOf("")
-    }
-
-    var emailError by remember {
-        mutableStateOf(false)
-    }
-
-    var cpf by remember() {
-        mutableStateOf("")
-    }
-
-    var cpfError by remember {
-        mutableStateOf(false)
-    }
-
-    var senha by remember() {
-        mutableStateOf("")
-    }
-
-    var senhaError by remember {
-        mutableStateOf(false)
-    }
-
-    var confirmacaosenha by remember() {
-        mutableStateOf("")
-    }
-
-    var confirmacaosenhaError by remember {
-        mutableStateOf(false)
-    }
-
+fun CadastroScreen(loginViewModel: LoginViewModel = viewModel()) {
     LazyColumn(
         modifier = Modifier
             .background(Color.White)
@@ -131,23 +62,47 @@ fun CadastroScreen() {
             Spacer(modifier = Modifier.height(14.dp))
             MyTextField(
                 labelValue = stringResource(id = R.string.namePlaceHolder),
-                icon = Icons.Outlined.Person
+                icon = Icons.Outlined.Person,
+                onTextSelected = {
+                    loginViewModel.onEvent(UIEvent.FirstNameChange(it))
+                }
             )
             MyTextField(
                 labelValue = stringResource(id = R.string.lastNamePlaceHolder),
-                icon = Icons.Outlined.Person
+                icon = Icons.Outlined.Person,
+                onTextSelected = {
+                    loginViewModel.onEvent(UIEvent.LastNameChange(it))
+                }
             )
             EmailTextField(
                 labelValue = stringResource(id = R.string.emailPlaceHolder),
                 icon =Icons.Outlined.Email
-            )
+            ) {
+                loginViewModel.onEvent(UIEvent.EmailChange(it))
+            }
             MyTextField(
                 labelValue = stringResource(id = R.string.cpfPlaceHolder),
-                icon = Icons.Outlined.Person
+                icon = Icons.Outlined.Person,
+                onTextSelected = {
+                    loginViewModel.onEvent(UIEvent.CPFChange(it))
+                }
             )
 
-            PasswordTextField(confirmPassword = true, labelValue = stringResource(id = R.string.passwordPlaceHolder), icon = Icons.Outlined.Lock)
-            PasswordTextField(labelValue = stringResource(id = R.string.confirmation_passwordplaceHolder), icon = Icons.Outlined.Lock)
+            PasswordTextField(
+                confirmPassword = true,
+                labelValue = stringResource(id = R.string.passwordPlaceHolder),
+                icon = Icons.Outlined.Lock,
+                onTextSelected = {
+                    loginViewModel.onEvent(UIEvent.PasswordChange(it))
+                }
+            )
+            PasswordTextField(
+                labelValue = stringResource(id = R.string.confirmation_passwordplaceHolder),
+                icon = Icons.Outlined.Lock,
+                onTextSelected = {
+                    loginViewModel.onEvent(UIEvent.ConfirmPasswordChange(it))
+                }
+            )
 
             CheckBoxTermosComponent(value = stringResource(R.string.agree_terms), onTextSelected = {})
             CheckBoxNewsletterComponent(value = stringResource(R.string.newsletter), onTextSelected = {})

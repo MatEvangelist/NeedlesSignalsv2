@@ -14,35 +14,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.fiap.needlessignals.R
 import br.com.fiap.needlessignals.components.CheckBoxComponent
 import br.com.fiap.needlessignals.components.ClickableLoginTextComponent
 import br.com.fiap.needlessignals.components.EmailTextField
 import br.com.fiap.needlessignals.components.HeadingTextComponent
 import br.com.fiap.needlessignals.components.PasswordTextField
+import br.com.fiap.needlessignals.data.LoginViewModel
+import br.com.fiap.needlessignals.data.UIEvent
 import br.com.fiap.needlessignals.navigation.NeedlesSignalsAppRouter
 import br.com.fiap.needlessignals.navigation.Screen
 import br.com.fiap.needlessignals.ui.theme.BluePrimary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen() {
-    var email by remember() {
-        mutableStateOf("")
-    }
-
-    var password by remember {
-        mutableStateOf("")
-    }
-
-    var emailError by remember {
-        mutableStateOf(false)
-    }
-
-    var remeberPassword by remember {
-        mutableStateOf(false)
-    }
-
+fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -64,9 +51,15 @@ fun LoginScreen() {
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            EmailTextField(labelValue = "Email", icon = Icons.Outlined.Email)
+            EmailTextField(labelValue = "Email", icon = Icons.Outlined.Email) {
+            }
+
             PasswordTextField(
-                labelValue = stringResource(R.string.password), icon = Icons.Outlined.Lock
+                labelValue = stringResource(R.string.password),
+                icon = Icons.Outlined.Lock,
+                onTextSelected = {
+                    loginViewModel.onEvent(UIEvent.ConfirmPasswordChange(it))
+                }
             )
 
             Spacer(modifier = Modifier.height(22.dp))
@@ -88,7 +81,6 @@ fun LoginScreen() {
             Row {
                 Button(
                     onClick = {
-                        emailError = email.isEmpty()
                     },
                     elevation = ButtonDefaults.buttonElevation(2.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
