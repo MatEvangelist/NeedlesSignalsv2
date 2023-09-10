@@ -2,10 +2,9 @@
     <string name="app_name">NeedlesSignals</string>
 
     <string name="login">Login</string>
-    <string name="welcome">Bem vindo!</string>
     <string name="subtitle">Please, provide your information</string>
-    <string name="email">Digite seu email</string>
-    <string name="password">Digite sua senha</string>
+    <string name="email">Email</string>
+    <string name="password">Senha</string>
     <string name="forgetPassword">Esqueceu sua senha?</string>
     <string name="enter">Entrar</string>
     <string name="register">Registrar</string>
@@ -23,4 +22,10 @@
     <string name="passwordPlaceHolder">Senha</string>
     <string name="confirmation_passwordLabel">Digite a senha novamente:</string>
     <string name="confirmation_passwordplaceHolder">Confirmação da Senha</string>
+    <string name="welcome">Bem vindo!</string>
+    <string name="hide_password">Esconder Senha</string>
+    <string name="show_password">Mostrar Senha</string>
+    <string name="remember_password">Lembrar Senha?</string>
+    <string name="recovery_password">Recuperar senha</string>
+    <string name="msg_recovery_password">Digite seu email cadastrado para recuperarmos seu acesso!</string>
 </resources>
