@@ -10,6 +10,7 @@ import br.com.fiap.needlessignals.navigation.NeedlesSignalsAppRouter
 import br.com.fiap.needlessignals.navigation.Screen
 import br.com.fiap.needlessignals.screens.CadastroScreen
 import br.com.fiap.needlessignals.screens.EsqueceuSenhaScreen
+import br.com.fiap.needlessignals.screens.HomeScreen
 import br.com.fiap.needlessignals.screens.LoginScreen
 import br.com.fiap.needlessignals.screens.TermoPrivacidadeScreen
 
@@ -20,6 +21,10 @@ fun NeedlesSignalsApp() {
             when (currentState.value) {
                 is Screen.LoginScreen -> {
                     LoginScreen()
+                }
+
+                is Screen.HomeScreen -> {
+                    HomeScreen()
                 }
 
                 is Screen.EsqueceuSenhaScreen -> {

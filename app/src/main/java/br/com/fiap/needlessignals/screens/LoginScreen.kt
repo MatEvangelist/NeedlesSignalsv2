@@ -126,6 +126,7 @@ fun LoginScreen() {
                 Button(
                     onClick = {
                         loginViewModel.onEvent(LoginFormEvent.Submit)
+                        NeedlesSignalsAppRouter.navigateTo(Screen.HomeScreen)
                     },
                     elevation = ButtonDefaults.buttonElevation(2.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),

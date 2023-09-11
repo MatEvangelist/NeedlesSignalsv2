@@ -5,5 +5,5 @@ sealed class LoginFormEvent {
     data class PasswordChange(val password: String) : LoginFormEvent()
     data class TermsChange(var terms: Boolean) : LoginFormEvent()
 
-    object Submit : LoginFormEvent()
+    object Submit : LoginFormEvent() {}
 }
