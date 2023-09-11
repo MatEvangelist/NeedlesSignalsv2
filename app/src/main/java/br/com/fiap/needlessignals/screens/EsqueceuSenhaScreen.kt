@@ -3,6 +3,7 @@ package br.com.fiap.needlessignals.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,13 +24,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.fiap.needlessignals.R
 import br.com.fiap.needlessignals.components.EmailTextField
 import br.com.fiap.needlessignals.components.HeadingTextComponent
 import br.com.fiap.needlessignals.components.NormalTextComponent
+import br.com.fiap.needlessignals.data.Login.LoginFormEvent
+import br.com.fiap.needlessignals.data.Recovery.RecoveryFormEvent
+import br.com.fiap.needlessignals.data.Recovery.RecoveryViewModel
 import br.com.fiap.needlessignals.navigation.NeedlesSignalsAppRouter
 import br.com.fiap.needlessignals.navigation.Screen
 import br.com.fiap.needlessignals.navigation.SystemBackButtonHandler
@@ -37,9 +45,11 @@ import br.com.fiap.needlessignals.ui.theme.BluePrimary
 
 @Composable
 fun EsqueceuSenhaScreen() {
+    val recoveryViewModel = viewModel<RecoveryViewModel>()
+    val state = recoveryViewModel.state
+    val context = LocalContext.current
+
     LazyColumn(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .background(Color.White)
             .padding(28.dp)
@@ -60,8 +70,25 @@ fun EsqueceuSenhaScreen() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            EmailTextField(labelValue = "Email", icon = Icons.Outlined.Email) {
+            Column {
+                EmailTextField(
+                    labelValue = stringResource(id = R.string.emailPlaceHolder),
+                    value = state.email,
+                    icon = Icons.Outlined.Email,
+                    isError = state.emailError != null,
+                ) {
+                    recoveryViewModel.onEvent(RecoveryFormEvent.EmailChange(it))
+                }
+                if (state.emailError != null) {
+                    Text(
+                        text = state.emailError,
+                        fontSize = 14.sp,
+                        color = Color.Red,
+                        textAlign = TextAlign.End
+                    )
+                }
             }
+
 
             Spacer(modifier = Modifier.height(81.dp))
 
@@ -90,7 +117,9 @@ fun EsqueceuSenhaScreen() {
                 Button(
                     elevation = ButtonDefaults.buttonElevation(2.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        recoveryViewModel.onEvent(RecoveryFormEvent.Submit)
+                    },
                     modifier = Modifier
                         .width(150.dp)
                         .height(45.dp)

@@ -1,8 +1,8 @@
 package br.com.fiap.needlessignals.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.ui.Alignment
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.Email
@@ -22,11 +23,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.fiap.needlessignals.R
 import br.com.fiap.needlessignals.components.CheckBoxNewsletterComponent
@@ -36,16 +40,34 @@ import br.com.fiap.needlessignals.components.HeadingTextComponent
 import br.com.fiap.needlessignals.components.MyTextField
 import br.com.fiap.needlessignals.components.PasswordTextField
 import br.com.fiap.needlessignals.components.TermsClickableTextComponent
-import br.com.fiap.needlessignals.data.LoginViewModel
-import br.com.fiap.needlessignals.data.UIEvent
+import br.com.fiap.needlessignals.data.Registration.RegistrationViewModel
+import br.com.fiap.needlessignals.data.Registration.RegistrationFormEvent
 import br.com.fiap.needlessignals.navigation.NeedlesSignalsAppRouter
 import br.com.fiap.needlessignals.navigation.Screen
 import br.com.fiap.needlessignals.navigation.SystemBackButtonHandler
 import br.com.fiap.needlessignals.ui.theme.BluePrimary
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CadastroScreen(loginViewModel: LoginViewModel = viewModel()) {
+fun CadastroScreen() {
+    val registrationViewModel = viewModel<RegistrationViewModel>()
+    val state = registrationViewModel.state
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = context ) {
+        registrationViewModel.validationEvents.collect { event ->
+            when(event) {
+                is RegistrationViewModel.ValidationEvent.Success -> {
+                    Toast.makeText(
+                        context,
+                        "Registration successfull",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
+
     LazyColumn(
         modifier = Modifier
             .background(Color.White)
@@ -60,52 +82,126 @@ fun CadastroScreen(loginViewModel: LoginViewModel = viewModel()) {
             })
 
             Spacer(modifier = Modifier.height(14.dp))
+
             MyTextField(
                 labelValue = stringResource(id = R.string.namePlaceHolder),
                 icon = Icons.Outlined.Person,
                 onTextSelected = {
-                    loginViewModel.onEvent(UIEvent.FirstNameChange(it))
-                }
+                    registrationViewModel.onEvent(RegistrationFormEvent.FirstNameChange(it))
+                },
+                value = state.firstName,
+                isError = state.firstNameError != null
             )
+            if (state.firstNameError != null) {
+                Text(
+                    text = state.firstNameError,
+                    fontSize = 14.sp,
+                    color = Color.Red,
+                    textAlign = TextAlign.End
+                )
+            }
             MyTextField(
                 labelValue = stringResource(id = R.string.lastNamePlaceHolder),
+                value = state.lastName,
                 icon = Icons.Outlined.Person,
+                isError = state.lastNameError != null,
                 onTextSelected = {
-                    loginViewModel.onEvent(UIEvent.LastNameChange(it))
-                }
+                    registrationViewModel.onEvent(RegistrationFormEvent.LastNameChange(it))
+                },
             )
+            if (state.lastNameError != null) {
+                Text(
+                    text = state.lastNameError,
+                    fontSize = 14.sp,
+                    color = Color.Red,
+                    textAlign = TextAlign.End
+                )
+            }
             EmailTextField(
                 labelValue = stringResource(id = R.string.emailPlaceHolder),
-                icon =Icons.Outlined.Email
+                value = state.email,
+                icon =Icons.Outlined.Email,
+                isError = state.emailError != null,
             ) {
-                loginViewModel.onEvent(UIEvent.EmailChange(it))
+                registrationViewModel.onEvent(RegistrationFormEvent.EmailChange(it))
+            }
+            if (state.emailError != null) {
+                Text(
+                    text = state.emailError,
+                    fontSize = 14.sp,
+                    color = Color.Red,
+                    textAlign = TextAlign.End
+                )
             }
             MyTextField(
                 labelValue = stringResource(id = R.string.cpfPlaceHolder),
                 icon = Icons.Outlined.Person,
                 onTextSelected = {
-                    loginViewModel.onEvent(UIEvent.CPFChange(it))
-                }
+                    registrationViewModel.onEvent(RegistrationFormEvent.CPFChange(it))
+                },
+                value = state.cpf,
+                isError = state.cpfError != null,
             )
-
+            if (state.cpfError != null) {
+                Text(
+                    text = state.cpfError,
+                    fontSize = 14.sp,
+                    color = Color.Red,
+                    textAlign = TextAlign.End
+                )
+            }
             PasswordTextField(
                 confirmPassword = true,
+                value = state.password,
                 labelValue = stringResource(id = R.string.passwordPlaceHolder),
                 icon = Icons.Outlined.Lock,
+                isError = state.passwordError != null,
                 onTextSelected = {
-                    loginViewModel.onEvent(UIEvent.PasswordChange(it))
+                    registrationViewModel.onEvent(RegistrationFormEvent.PasswordChange(it))
                 }
             )
+            if (state.passwordError != null) {
+                Text(
+                    text = state.passwordError,
+                    fontSize = 14.sp,
+                    color = Color.Red,
+                    textAlign = TextAlign.End
+                )
+            }
             PasswordTextField(
                 labelValue = stringResource(id = R.string.confirmation_passwordplaceHolder),
                 icon = Icons.Outlined.Lock,
                 onTextSelected = {
-                    loginViewModel.onEvent(UIEvent.ConfirmPasswordChange(it))
+                    registrationViewModel.onEvent(RegistrationFormEvent.ConfirmPasswordChange(it))
+                },
+                value = state.confirmPassword,
+                isError = state.confirmPasswordError != null
+            )
+            if (state.confirmPasswordError != null) {
+                Text(
+                    text = state.confirmPasswordError,
+                    fontSize = 14.sp,
+                    color = Color.Red,
+                    textAlign = TextAlign.End
+                )
+            }
+            CheckBoxTermosComponent(
+                value = stringResource(R.string.agree_terms),
+                checked = state.acceptedTerms,
+                onCheckedChange = {
+                    registrationViewModel.onEvent(RegistrationFormEvent.TermsChange(it != null))
                 }
             )
-
-            CheckBoxTermosComponent(value = stringResource(R.string.agree_terms), onTextSelected = {})
-            CheckBoxNewsletterComponent(value = stringResource(R.string.newsletter), onTextSelected = {})
+            if (state.termsError != null) {
+                Text(
+                    text = state.termsError,
+                    color = Color.Red,
+                )
+            }
+            CheckBoxNewsletterComponent(
+                value = stringResource(R.string.newsletter),
+                onTextSelected = {}
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
             Row(
@@ -117,7 +213,7 @@ fun CadastroScreen(loginViewModel: LoginViewModel = viewModel()) {
                     elevation = ButtonDefaults.buttonElevation(2.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
                     onClick = {
-                        NeedlesSignalsAppRouter.navigateTo(Screen.LoginScreen)
+                        registrationViewModel.onEvent(RegistrationFormEvent.Submit)
                     },
                     modifier = Modifier
                         .width(150.dp)

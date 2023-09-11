@@ -97,7 +97,7 @@ fun TermoPrivacidadeScreen() {
                 }
 
                 SystemBackButtonHandler {
-                    NeedlesSignalsAppRouter.navigateTo(Screen.LoginScreen)
+                    NeedlesSignalsAppRouter.navigateTo(Screen.CadastroScreen)
                 }
             }
         }

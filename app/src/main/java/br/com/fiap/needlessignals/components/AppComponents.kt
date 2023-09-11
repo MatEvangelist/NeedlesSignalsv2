@@ -26,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -89,7 +88,9 @@ fun NormalTextComponent(value: String) {
 fun MyTextField(
     labelValue: String,
     icon: ImageVector,
-    onTextSelected: (String) -> Unit
+    onTextSelected: (String) -> Unit,
+    value: String,
+    isError: Boolean
 ) {
     var textValue by remember {
         mutableStateOf("")
@@ -99,10 +100,11 @@ fun MyTextField(
         modifier = Modifier
             .fillMaxWidth()
             .clip(componentShapes.small),
-        value = textValue,
+        value = value,
         label = { Text(text = labelValue) },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         singleLine = true,
+        isError = isError,
         maxLines = 1,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Primary,
@@ -111,7 +113,6 @@ fun MyTextField(
             containerColor = BgColor
         ),
         onValueChange = {
-            textValue = it
             onTextSelected(it)
         },
         leadingIcon = {
@@ -125,22 +126,15 @@ fun EmailTextField(
     value: String = "",
     labelValue: String,
     icon: ImageVector,
+    isError: Boolean,
     onTextSelected: (String) -> Unit
 ) {
-
-    var emailValue by remember {
-        mutableStateOf("")
-    }
-
-    var emailError by remember {
-        mutableStateOf(false)
-    }
 
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
             .clip(componentShapes.small),
-        value = emailValue,
+        value = value,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
         singleLine = true,
         maxLines = 1,
@@ -152,22 +146,13 @@ fun EmailTextField(
             containerColor = BgColor
         ),
         onValueChange = {
-            emailValue = it
             onTextSelected(it)
         },
-        isError = emailError,
+        isError = isError,
         leadingIcon = {
             Icon(imageVector = icon, contentDescription = "")
         }
     )
-    if (emailError) {
-        Text(
-            text = "E-mail é obrigatório!",
-            modifier = Modifier.fillMaxWidth(),
-            color = Color.Red,
-            textAlign = TextAlign.End
-        )
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -176,17 +161,11 @@ fun PasswordTextField(
     confirmPassword: Boolean = false,
     labelValue: String,
     icon: ImageVector,
-    onTextSelected: (String) -> Unit
+    onTextSelected: (String) -> Unit,
+    value: String,
+    isError: Boolean
 ) {
     val localFocusManager = LocalFocusManager.current
-
-    var password by remember {
-        mutableStateOf("")
-    }
-
-    var passwordVisible by remember {
-        mutableStateOf(false)
-    }
 
     var imeAction = ImeAction.Done
 
@@ -194,15 +173,19 @@ fun PasswordTextField(
         imeAction = ImeAction.Next
     }
 
+    var passwordVisible by remember {
+        mutableStateOf(false)
+    }
 
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
             .clip(componentShapes.small),
-        value = password,
+        value = value,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = imeAction),
         singleLine = true,
         maxLines = 1,
+        isError = isError,
         keyboardActions = KeyboardActions{
             if (!confirmPassword) {
                 localFocusManager.clearFocus()
@@ -218,7 +201,6 @@ fun PasswordTextField(
             containerColor = BgColor
         ),
         onValueChange = {
-            password = it
             onTextSelected(it)
         },
         leadingIcon = {
@@ -345,21 +327,20 @@ fun ClickableLoginTextComponent(value: String, onTextSelected: (String) -> Unit)
 }
 
 @Composable
-fun CheckBoxTermosComponent(value: String, onTextSelected: (String) -> Unit) {
-    var checkedState by remember {
-        mutableStateOf(false)
-    }
-
+fun CheckBoxTermosComponent(value: String, onCheckedChange: (Boolean) -> Unit, checked: Boolean) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(76.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Checkbox(checked = checkedState, onCheckedChange = {
-            checkedState = !checkedState
-        })
-        ClickableTermosTextComponent(value = value, onTextSelected)
+        Checkbox(
+            checked = checked,
+            onCheckedChange = {
+                onCheckedChange(it)
+            }
+        )
+        ClickableTermosTextComponent(value = value, onTextSelected = {})
     }
 }
 

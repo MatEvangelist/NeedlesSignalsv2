@@ -1,5 +1,6 @@
 package br.com.fiap.needlessignals.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,9 +12,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.fiap.needlessignals.R
 import br.com.fiap.needlessignals.components.CheckBoxComponent
@@ -21,21 +24,37 @@ import br.com.fiap.needlessignals.components.ClickableLoginTextComponent
 import br.com.fiap.needlessignals.components.EmailTextField
 import br.com.fiap.needlessignals.components.HeadingTextComponent
 import br.com.fiap.needlessignals.components.PasswordTextField
-import br.com.fiap.needlessignals.data.LoginViewModel
-import br.com.fiap.needlessignals.data.UIEvent
+import br.com.fiap.needlessignals.data.Login.LoginFormEvent
+import br.com.fiap.needlessignals.data.Login.LoginViewModel
 import br.com.fiap.needlessignals.navigation.NeedlesSignalsAppRouter
 import br.com.fiap.needlessignals.navigation.Screen
 import br.com.fiap.needlessignals.ui.theme.BluePrimary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
+fun LoginScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
             .padding(32.dp)
     ) {
+        val loginViewModel = viewModel<LoginViewModel>()
+        val state = loginViewModel.state
+        val context = LocalContext.current
+        LaunchedEffect(key1 = context ) {
+            loginViewModel.validationEvents.collect { event ->
+                when(event) {
+                    is LoginViewModel.ValidationEvent.Success -> {
+                        Toast.makeText(
+                            context,
+                            "Login Efetuado com sucesso!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+        }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -50,17 +69,42 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
             HeadingTextComponent(value = stringResource(R.string.welcome))
 
             Spacer(modifier = Modifier.height(10.dp))
-
-            EmailTextField(labelValue = "Email", icon = Icons.Outlined.Email) {
+            Column {
+                EmailTextField(
+                    labelValue = stringResource(id = R.string.emailPlaceHolder),
+                    value = state.email,
+                    icon = Icons.Outlined.Email,
+                    isError = state.emailError != null,
+                ) {
+                    loginViewModel.onEvent(LoginFormEvent.EmailChange(it))
+                }
+                if (state.emailError != null) {
+                    Text(
+                        text = state.emailError,
+                        fontSize = 14.sp,
+                        color = Color.Red,
+                    )
+                }
             }
 
+
             PasswordTextField(
-                labelValue = stringResource(R.string.password),
+                confirmPassword = true,
+                value = state.password,
+                labelValue = stringResource(id = R.string.passwordPlaceHolder),
                 icon = Icons.Outlined.Lock,
+                isError = state.passwordError != null,
                 onTextSelected = {
-                    loginViewModel.onEvent(UIEvent.ConfirmPasswordChange(it))
+                    loginViewModel.onEvent(LoginFormEvent.PasswordChange(it))
                 }
             )
+            if (state.passwordError != null) {
+                Text(
+                    text = state.passwordError,
+                    fontSize = 14.sp,
+                    color = Color.Red,
+                )
+            }
 
             Spacer(modifier = Modifier.height(22.dp))
 
@@ -81,6 +125,7 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
             Row {
                 Button(
                     onClick = {
+                        loginViewModel.onEvent(LoginFormEvent.Submit)
                     },
                     elevation = ButtonDefaults.buttonElevation(2.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
