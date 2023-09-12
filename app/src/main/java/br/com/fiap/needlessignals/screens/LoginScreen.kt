@@ -28,6 +28,7 @@ import br.com.fiap.needlessignals.data.Login.LoginFormEvent
 import br.com.fiap.needlessignals.data.Login.LoginViewModel
 import br.com.fiap.needlessignals.navigation.NeedlesSignalsAppRouter
 import br.com.fiap.needlessignals.navigation.Screen
+import br.com.fiap.needlessignals.navigation.SystemBackButtonHandler
 import br.com.fiap.needlessignals.ui.theme.BluePrimary
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -125,8 +126,8 @@ fun LoginScreen() {
             Row {
                 Button(
                     onClick = {
-                        loginViewModel.onEvent(LoginFormEvent.Submit)
                         NeedlesSignalsAppRouter.navigateTo(Screen.HomeScreen)
+//                        loginViewModel.onEvent(LoginFormEvent.Submit)
                     },
                     elevation = ButtonDefaults.buttonElevation(2.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
@@ -150,7 +151,9 @@ fun LoginScreen() {
                     Text(text = stringResource(id = R.string.register), color = BluePrimary)
                 }
             }
-
+            SystemBackButtonHandler {
+                NeedlesSignalsAppRouter.navigateTo(Screen.LoginScreen)
+            }
         }
     }
 }

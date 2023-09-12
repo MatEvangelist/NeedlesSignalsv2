@@ -4,12 +4,16 @@ import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.FilterAlt
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -49,6 +54,24 @@ import br.com.fiap.needlessignals.ui.theme.Primary
 import br.com.fiap.needlessignals.ui.theme.TextColor
 import br.com.fiap.needlessignals.ui.theme.componentShapes
 
+@Composable
+fun IconComponent(imageVector: ImageVector, contextDescription: String, modifier: Modifier = Modifier.size(30.dp)) {
+    Icon(
+        modifier = modifier,
+        imageVector = imageVector,
+        contentDescription = contextDescription
+    )
+}
+
+@Composable
+fun ButtonComponent(onClickCallback: () -> Unit, text: String, containerColor: Color = Color.Black) {
+    Button(
+        onClick = onClickCallback,
+        colors = ButtonDefaults.buttonColors(containerColor = containerColor)
+    ) {
+        Text(text = text, color = Color.White)
+    }
+}
 @Composable
 fun HeadingTextComponent(value: String) {
     Text(

@@ -40,6 +40,7 @@ import br.com.fiap.needlessignals.components.HeadingTextComponent
 import br.com.fiap.needlessignals.components.MyTextField
 import br.com.fiap.needlessignals.components.PasswordTextField
 import br.com.fiap.needlessignals.components.TermsClickableTextComponent
+import br.com.fiap.needlessignals.data.Login.LoginFormEvent
 import br.com.fiap.needlessignals.data.Registration.RegistrationViewModel
 import br.com.fiap.needlessignals.data.Registration.RegistrationFormEvent
 import br.com.fiap.needlessignals.navigation.NeedlesSignalsAppRouter
@@ -177,6 +178,7 @@ fun CadastroScreen() {
                 value = state.confirmPassword,
                 isError = state.confirmPasswordError != null
             )
+
             if (state.confirmPasswordError != null) {
                 Text(
                     text = state.confirmPasswordError,
@@ -213,7 +215,7 @@ fun CadastroScreen() {
                     elevation = ButtonDefaults.buttonElevation(2.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
                     onClick = {
-                        registrationViewModel.onEvent(RegistrationFormEvent.Submit)
+                        NeedlesSignalsAppRouter.navigateTo(Screen.LoginScreen)
                     },
                     modifier = Modifier
                         .width(150.dp)
@@ -245,7 +247,7 @@ fun CadastroScreen() {
                 }
 
                 SystemBackButtonHandler {
-                    NeedlesSignalsAppRouter.navigateTo(Screen.LoginScreen)
+                    registrationViewModel.onEvent(RegistrationFormEvent.Submit)
                 }
             }
         }

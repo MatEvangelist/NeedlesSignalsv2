@@ -1,16 +1,33 @@
 package br.com.fiap.needlessignals.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.ArrowDropDown
+import androidx.compose.material.icons.outlined.FilterAlt
+import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -24,8 +41,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import br.com.fiap.needlessignals.components.ButtonComponent
+import br.com.fiap.needlessignals.components.IconComponent
+import br.com.fiap.needlessignals.ui.theme.BgColor
 
 data class BottonNavigationItem(
     val title: String,
@@ -42,22 +66,22 @@ fun HomeScreen() {
     val items = listOf(
         BottonNavigationItem(
             title = "Home",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home,
+            selectedIcon = Icons.Filled.Star,
+            unselectedIcon = Icons.Outlined.Star,
             hasNews = false
         ),
         BottonNavigationItem(
             title = "Chat",
-            selectedIcon = Icons.Filled.Email,
-            unselectedIcon = Icons.Outlined.Email,
+            selectedIcon = Icons.Filled.Menu,
+            unselectedIcon = Icons.Outlined.Menu,
             hasNews = false,
-            badgeCount = 45
+            badgeCount = 35
         ),
         BottonNavigationItem(
             title = "Settings",
             selectedIcon = Icons.Filled.Settings,
             unselectedIcon = Icons.Outlined.Settings,
-            hasNews = true
+            hasNews = false
         ),
     )
     var selectedItemIndex by rememberSaveable {
@@ -69,6 +93,9 @@ fun HomeScreen() {
         color = MaterialTheme.colorScheme.background
     ) {
         Scaffold(
+            topBar = {
+
+            },
             bottomBar = {
                 NavigationBar() {
                     items.forEachIndexed { index, item ->
@@ -77,9 +104,6 @@ fun HomeScreen() {
                             onClick = {
                                 selectedItemIndex = index
                                 // navController.navigate(item.title)
-                            },
-                            label = {
-                                Text(text = item.title)
                             },
                             alwaysShowLabel = false,
                             icon = {
@@ -106,7 +130,89 @@ fun HomeScreen() {
                 }
             }
         ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(BgColor)
+            ) {
+                Spacer(modifier = Modifier.height(45.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .background(Color.White)
+                        .height(64.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(text = "Sinais", fontSize = 32.sp)
+                    Spacer(modifier = Modifier.width(115.dp))
+                    IconComponent(
+                        imageVector = Icons.Outlined.FilterAlt,
+                        contextDescription = "Filtro"
+                    )
+                    Spacer(modifier = Modifier.width(18.dp))
 
+                    IconComponent(
+                        imageVector = Icons.Outlined.Search,
+                        contextDescription = "Search"
+                    )
+                    Spacer(modifier = Modifier.width(18.dp))
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = "M1", fontSize = 25.sp)
+                        IconComponent(
+                            imageVector = Icons.Outlined.ArrowDropDown,
+                            contextDescription = "Filtro",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+                LazyRow(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    item {
+                        ButtonComponent(
+                            onClickCallback = { /*TODO*/ },
+                            text = "Forex",
+                        )
+                        Spacer(modifier = Modifier.width(5.dp))
+                        ButtonComponent(
+                            onClickCallback = { /*TODO*/ },
+                            text = "Criptomoedas"
+                        )
+                        Spacer(modifier = Modifier.width(5.dp))
+
+                        ButtonComponent(
+                            onClickCallback = { /*TODO*/ },
+                            text = "Index Future"
+                        )
+                    }
+                }
+
+                LazyColumn(modifier = Modifier.padding(16.dp)) {
+                    item(40) {
+                        for (i in 1..100) {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .height(70.dp),
+
+                            colors = CardDefaults.cardColors(containerColor = Color.White),
+                            elevation = CardDefaults.cardElevation(16.dp)
+                        ) {
+                            Text(text = "Card do maneiro $i")
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        }
+
+                    }
+                }
+
+            }
         }
     }
 }
