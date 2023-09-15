@@ -1,5 +1,6 @@
 package br.com.fiap.needlessignals.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +25,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -40,24 +43,35 @@ import br.com.fiap.needlessignals.components.HeadingTextComponent
 import br.com.fiap.needlessignals.components.MyTextField
 import br.com.fiap.needlessignals.components.PasswordTextField
 import br.com.fiap.needlessignals.components.TermsClickableTextComponent
-import br.com.fiap.needlessignals.data.Login.LoginFormEvent
 import br.com.fiap.needlessignals.data.Registration.RegistrationViewModel
 import br.com.fiap.needlessignals.data.Registration.RegistrationFormEvent
+import br.com.fiap.needlessignals.models.User
+import br.com.fiap.needlessignals.models.UserTokenDto
 import br.com.fiap.needlessignals.navigation.NeedlesSignalsAppRouter
 import br.com.fiap.needlessignals.navigation.Screen
 import br.com.fiap.needlessignals.navigation.SystemBackButtonHandler
+import br.com.fiap.needlessignals.service.RetrofitFactory
 import br.com.fiap.needlessignals.ui.theme.BluePrimary
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CadastroScreen() {
+
+
     val registrationViewModel = viewModel<RegistrationViewModel>()
     val state = registrationViewModel.state
     val context = LocalContext.current
 
-    LaunchedEffect(key1 = context ) {
+    var userTokenDtoState = remember {
+        mutableStateOf("")
+    }
+
+    LaunchedEffect(key1 = context) {
         registrationViewModel.validationEvents.collect { event ->
-            when(event) {
+            when (event) {
                 is RegistrationViewModel.ValidationEvent.Success -> {
                     Toast.makeText(
                         context,
@@ -79,8 +93,8 @@ fun CadastroScreen() {
             Spacer(modifier = Modifier.height(14.dp))
             TermsClickableTextComponent(
                 value = "", onTextSelected = {
-                NeedlesSignalsAppRouter.navigateTo(Screen.TermoPrivacidadeScreen)
-            })
+                    NeedlesSignalsAppRouter.navigateTo(Screen.TermoPrivacidadeScreen)
+                })
 
             Spacer(modifier = Modifier.height(14.dp))
 
@@ -121,7 +135,7 @@ fun CadastroScreen() {
             EmailTextField(
                 labelValue = stringResource(id = R.string.emailPlaceHolder),
                 value = state.email,
-                icon =Icons.Outlined.Email,
+                icon = Icons.Outlined.Email,
                 isError = state.emailError != null,
             ) {
                 registrationViewModel.onEvent(RegistrationFormEvent.EmailChange(it))
@@ -232,7 +246,29 @@ fun CadastroScreen() {
                     elevation = ButtonDefaults.buttonElevation(2.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
                     onClick = {
-                        NeedlesSignalsAppRouter.navigateTo(Screen.LoginScreen)
+                        var user = User(
+                            state.firstName,
+                            state.lastName,
+                            state.email,
+                            state.password,
+                            state.cpf
+                        )
+                        var call = RetrofitFactory().setRegister().setRegister(user)
+                        call.enqueue(object : Callback<UserTokenDto> {
+                            override fun onResponse(
+                                call: Call<UserTokenDto>,
+                                response: Response<UserTokenDto>
+                            ) {
+                                var response = response.body()!!
+                                userTokenDtoState.value = response.token.toString()
+                                Log.i("FILHADAPUTA", "onResponse: ${userTokenDtoState.value}")
+                            }
+
+                            override fun onFailure(call: Call<UserTokenDto>, t: Throwable) {
+                                Log.i("FIAP", "onResponse: ${t.message}")
+                            }
+
+                        })
                     },
                     modifier = Modifier
                         .width(150.dp)
