@@ -1,4 +1,4 @@
-package br.com.fiap.needlessignals.data.Registration
+package br.com.fiap.needlessignals.presentation.data.Registration
 
 sealed class RegistrationFormEvent {
     data class FirstNameChange(val firstName: String) : RegistrationFormEvent()
@@ -8,6 +8,5 @@ sealed class RegistrationFormEvent {
     data class PasswordChange(val password: String) : RegistrationFormEvent()
     data class ConfirmPasswordChange(val confirmPassword: String) : RegistrationFormEvent()
     data class TermsChange(var terms: Boolean) : RegistrationFormEvent()
-
     object Submit : RegistrationFormEvent()
 }

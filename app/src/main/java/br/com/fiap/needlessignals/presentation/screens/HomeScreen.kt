@@ -1,4 +1,4 @@
-package br.com.fiap.needlessignals.screens
+package br.com.fiap.needlessignals.presentation.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
@@ -47,8 +48,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.com.fiap.needlessignals.components.ButtonComponent
-import br.com.fiap.needlessignals.components.IconComponent
+import br.com.fiap.needlessignals.data.DummyAtivosDataSource
+import br.com.fiap.needlessignals.data.model.Ativos
+import br.com.fiap.needlessignals.presentation.components.AtivoCard
+import br.com.fiap.needlessignals.presentation.components.ButtonComponent
+import br.com.fiap.needlessignals.presentation.components.IconComponent
 import br.com.fiap.needlessignals.ui.theme.BgColor
 
 data class BottonNavigationItem(
@@ -87,6 +91,8 @@ fun HomeScreen() {
     var selectedItemIndex by rememberSaveable {
         mutableStateOf(0)
     }
+    val ativoList = DummyAtivosDataSource.ativosList
+
     // A surface container using the 'background' color from the theme
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -194,21 +200,8 @@ fun HomeScreen() {
                 }
 
                 LazyColumn(modifier = Modifier.padding(16.dp)) {
-                    item(40) {
-                        for (i in 1..100) {
-                        Card(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .height(70.dp),
-
-                            colors = CardDefaults.cardColors(containerColor = Color.White),
-                            elevation = CardDefaults.cardElevation(16.dp)
-                        ) {
-                            Text(text = "Card do maneiro $i")
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-                        }
-
+                    itemsIndexed(ativoList) {index, ativo->
+                        AtivoCard(ativo = ativo)
                     }
                 }
 

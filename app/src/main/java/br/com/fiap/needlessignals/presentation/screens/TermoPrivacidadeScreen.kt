@@ -1,4 +1,4 @@
-package br.com.fiap.needlessignals.screens
+package br.com.fiap.needlessignals.presentation.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,11 +26,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import br.com.fiap.needlessignals.R
-import br.com.fiap.needlessignals.components.HeadingTextComponent
-import br.com.fiap.needlessignals.components.NormalTextComponent
-import br.com.fiap.needlessignals.navigation.NeedlesSignalsAppRouter
-import br.com.fiap.needlessignals.navigation.Screen
-import br.com.fiap.needlessignals.navigation.SystemBackButtonHandler
+import br.com.fiap.needlessignals.presentation.components.HeadingTextComponent
+import br.com.fiap.needlessignals.presentation.components.NormalTextComponent
+import br.com.fiap.needlessignals.presentation.navigation.NeedlesSignalsAppRouter
+import br.com.fiap.needlessignals.presentation.navigation.Screen
+import br.com.fiap.needlessignals.presentation.navigation.SystemBackButtonHandler
 import br.com.fiap.needlessignals.ui.theme.BluePrimary
 
 @Composable

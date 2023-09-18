@@ -1,6 +1,5 @@
-package br.com.fiap.needlessignals.data
+package br.com.fiap.needlessignals.presentation.data
 
-import kotlin.properties.Delegates
 
 data class RegistrationUIState(
     val firstName: String = "",

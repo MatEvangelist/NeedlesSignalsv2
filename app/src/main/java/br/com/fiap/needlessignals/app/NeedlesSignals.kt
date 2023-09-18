@@ -6,13 +6,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import br.com.fiap.needlessignals.navigation.NeedlesSignalsAppRouter
-import br.com.fiap.needlessignals.navigation.Screen
-import br.com.fiap.needlessignals.screens.CadastroScreen
-import br.com.fiap.needlessignals.screens.EsqueceuSenhaScreen
-import br.com.fiap.needlessignals.screens.HomeScreen
-import br.com.fiap.needlessignals.screens.LoginScreen
-import br.com.fiap.needlessignals.screens.TermoPrivacidadeScreen
+import br.com.fiap.needlessignals.presentation.navigation.NeedlesSignalsAppRouter
+import br.com.fiap.needlessignals.presentation.navigation.Screen
+import br.com.fiap.needlessignals.presentation.screens.CadastroScreen
+import br.com.fiap.needlessignals.presentation.screens.EsqueceuSenhaScreen
+import br.com.fiap.needlessignals.presentation.screens.HomeScreen
+import br.com.fiap.needlessignals.presentation.screens.LoginScreen
+import br.com.fiap.needlessignals.presentation.screens.TermoPrivacidadeScreen
 
 @Composable
 fun NeedlesSignalsApp() {

@@ -1,4 +1,4 @@
-package br.com.fiap.needlessignals.data.Login
+package br.com.fiap.needlessignals.presentation.data.Login
 
 sealed class LoginFormEvent {
     data class EmailChange(val email: String) : LoginFormEvent()

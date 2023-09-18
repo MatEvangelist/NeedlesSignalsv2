@@ -1,4 +1,4 @@
-package br.com.fiap.needlessignals.models
+package br.com.fiap.needlessignals.presentation.models
 
 import com.google.gson.annotations.SerializedName
 

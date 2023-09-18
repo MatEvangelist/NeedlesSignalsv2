@@ -1,4 +1,4 @@
-package br.com.fiap.needlessignals.navigation
+package br.com.fiap.needlessignals.presentation.navigation
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf

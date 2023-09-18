@@ -1,4 +1,4 @@
-package br.com.fiap.needlessignals.data.Login
+package br.com.fiap.needlessignals.presentation.data.Recovery
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,35 +6,25 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.fiap.cleanarchformavalidation.domain.use_case.ValidateEmail
-import br.com.fiap.cleanarchformavalidation.domain.use_case.ValidatePassword
-import br.com.fiap.cleanarchformavalidation.domain.use_case.ValidateTerms
-import br.com.fiap.needlessignals.data.RegistrationUIState
+import br.com.fiap.needlessignals.presentation.data.RegistrationUIState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class LoginViewModel(
+class RecoveryViewModel(
     private val validateEmail: ValidateEmail = ValidateEmail(),
-    private val validatePassword: ValidatePassword = ValidatePassword(),
-    private val validateTerms: ValidateTerms = ValidateTerms()
 ): ViewModel(
 ) {
     var state by mutableStateOf(RegistrationUIState())
     private val validationEventChannel = Channel<ValidationEvent>()
     val validationEvents = validationEventChannel.receiveAsFlow()
-    fun onEvent(event: LoginFormEvent){
+    fun onEvent(event: RecoveryFormEvent){
         when(event) {
-            is LoginFormEvent.EmailChange -> {
+            is RecoveryFormEvent.EmailChange -> {
                 state = state.copy(email = event.email)
             }
-            is LoginFormEvent.PasswordChange -> {
-                state = state.copy(password = event.password)
-            }
-            is LoginFormEvent.TermsChange -> {
-                state = state.copy(acceptedTerms = event.terms)
-            }
 
-            is LoginFormEvent.Submit -> {
+            is RecoveryFormEvent.Submit -> {
                 submitData()
             }
         }
@@ -42,17 +32,14 @@ class LoginViewModel(
 
     private fun submitData() {
         val emailResult = validateEmail.execute(state.email)
-        val passwordResult = validatePassword.execute(state.password)
 
         val hasError = listOf(
             emailResult,
-            passwordResult,
         ).any { !it.successful }
 
         if(hasError) {
             state = state.copy(
                 emailError = emailResult.errorMessage,
-                passwordError = passwordResult.errorMessage,
             )
             return
         }

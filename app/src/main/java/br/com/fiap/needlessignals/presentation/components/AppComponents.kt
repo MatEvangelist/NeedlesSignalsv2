@@ -1,4 +1,4 @@
-package br.com.fiap.needlessignals.components
+package br.com.fiap.needlessignals.presentation.components
 
 import android.util.Log
 import androidx.compose.foundation.layout.Row

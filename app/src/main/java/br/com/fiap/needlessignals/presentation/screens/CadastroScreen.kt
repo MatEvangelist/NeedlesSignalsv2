@@ -1,4 +1,4 @@
-package br.com.fiap.needlessignals.screens
+package br.com.fiap.needlessignals.presentation.screens
 
 import android.util.Log
 import android.widget.Toast
@@ -36,20 +36,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.fiap.needlessignals.R
-import br.com.fiap.needlessignals.components.CheckBoxNewsletterComponent
-import br.com.fiap.needlessignals.components.CheckBoxTermosComponent
-import br.com.fiap.needlessignals.components.EmailTextField
-import br.com.fiap.needlessignals.components.HeadingTextComponent
-import br.com.fiap.needlessignals.components.MyTextField
-import br.com.fiap.needlessignals.components.PasswordTextField
-import br.com.fiap.needlessignals.components.TermsClickableTextComponent
-import br.com.fiap.needlessignals.data.Registration.RegistrationViewModel
-import br.com.fiap.needlessignals.data.Registration.RegistrationFormEvent
-import br.com.fiap.needlessignals.models.User
-import br.com.fiap.needlessignals.models.UserTokenDto
-import br.com.fiap.needlessignals.navigation.NeedlesSignalsAppRouter
-import br.com.fiap.needlessignals.navigation.Screen
-import br.com.fiap.needlessignals.navigation.SystemBackButtonHandler
+import br.com.fiap.needlessignals.presentation.components.CheckBoxNewsletterComponent
+import br.com.fiap.needlessignals.presentation.components.CheckBoxTermosComponent
+import br.com.fiap.needlessignals.presentation.components.EmailTextField
+import br.com.fiap.needlessignals.presentation.components.HeadingTextComponent
+import br.com.fiap.needlessignals.presentation.components.MyTextField
+import br.com.fiap.needlessignals.presentation.components.PasswordTextField
+import br.com.fiap.needlessignals.presentation.components.TermsClickableTextComponent
+import br.com.fiap.needlessignals.presentation.data.Registration.RegistrationFormEvent
+import br.com.fiap.needlessignals.presentation.data.Registration.RegistrationViewModel
+import br.com.fiap.needlessignals.presentation.models.User
+import br.com.fiap.needlessignals.presentation.models.UserTokenDto
+import br.com.fiap.needlessignals.presentation.navigation.NeedlesSignalsAppRouter
+import br.com.fiap.needlessignals.presentation.navigation.Screen
+import br.com.fiap.needlessignals.presentation.navigation.SystemBackButtonHandler
 import br.com.fiap.needlessignals.service.RetrofitFactory
 import br.com.fiap.needlessignals.ui.theme.BluePrimary
 import retrofit2.Call
@@ -261,7 +261,10 @@ fun CadastroScreen() {
                             ) {
                                 var response = response.body()!!
                                 userTokenDtoState.value = response.token.toString()
-                                Log.i("FILHADAPUTA", "onResponse: ${userTokenDtoState.value}")
+                                if (userTokenDtoState.value.isNotBlank()) {
+                                    NeedlesSignalsAppRouter.navigateTo(Screen.HomeScreen)
+                                }
+                                Log.i("REGISTRATION", "onResponse: ${userTokenDtoState.value}")
                             }
 
                             override fun onFailure(call: Call<UserTokenDto>, t: Throwable) {

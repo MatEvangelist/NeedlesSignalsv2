@@ -1,4 +1,4 @@
-package br.com.fiap.needlessignals.data.Registration
+package br.com.fiap.needlessignals.presentation.data.Registration
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,7 +12,7 @@ import br.com.fiap.cleanarchformavalidation.domain.use_case.ValidateLastName
 import br.com.fiap.cleanarchformavalidation.domain.use_case.ValidatePassword
 import br.com.fiap.cleanarchformavalidation.domain.use_case.ValidateRepeatedPassword
 import br.com.fiap.cleanarchformavalidation.domain.use_case.ValidateTerms
-import br.com.fiap.needlessignals.data.RegistrationUIState
+import br.com.fiap.needlessignals.presentation.data.RegistrationUIState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -24,7 +24,7 @@ class RegistrationViewModel(
     private val validateCpf: ValidateCpf = ValidateCpf(),
     private val validatePassword: ValidatePassword = ValidatePassword(),
     private val validateRepeatedPassword: ValidateRepeatedPassword = ValidateRepeatedPassword(),
-    private val validateTerms: ValidateTerms = ValidateTerms()
+    private val validateTerms: ValidateTerms = ValidateTerms(),
 ): ViewModel(
 ) {
     var state by mutableStateOf(RegistrationUIState())

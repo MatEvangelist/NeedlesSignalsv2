@@ -1,5 +1,6 @@
-package br.com.fiap.needlessignals.screens
+package br.com.fiap.needlessignals.presentation.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,17 +20,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.fiap.needlessignals.R
-import br.com.fiap.needlessignals.components.CheckBoxComponent
-import br.com.fiap.needlessignals.components.ClickableLoginTextComponent
-import br.com.fiap.needlessignals.components.EmailTextField
-import br.com.fiap.needlessignals.components.HeadingTextComponent
-import br.com.fiap.needlessignals.components.PasswordTextField
-import br.com.fiap.needlessignals.data.Login.LoginFormEvent
-import br.com.fiap.needlessignals.data.Login.LoginViewModel
-import br.com.fiap.needlessignals.navigation.NeedlesSignalsAppRouter
-import br.com.fiap.needlessignals.navigation.Screen
-import br.com.fiap.needlessignals.navigation.SystemBackButtonHandler
+import br.com.fiap.needlessignals.presentation.components.CheckBoxComponent
+import br.com.fiap.needlessignals.presentation.components.ClickableLoginTextComponent
+import br.com.fiap.needlessignals.presentation.components.EmailTextField
+import br.com.fiap.needlessignals.presentation.components.HeadingTextComponent
+import br.com.fiap.needlessignals.presentation.components.PasswordTextField
+import br.com.fiap.needlessignals.presentation.data.Login.LoginFormEvent
+import br.com.fiap.needlessignals.presentation.data.Login.LoginViewModel
+import br.com.fiap.needlessignals.presentation.models.UserLogin
+import br.com.fiap.needlessignals.presentation.models.UserTokenDto
+import br.com.fiap.needlessignals.presentation.navigation.NeedlesSignalsAppRouter
+import br.com.fiap.needlessignals.presentation.navigation.Screen
+import br.com.fiap.needlessignals.presentation.navigation.SystemBackButtonHandler
+import br.com.fiap.needlessignals.service.RetrofitFactory
 import br.com.fiap.needlessignals.ui.theme.BluePrimary
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,6 +50,10 @@ fun LoginScreen() {
         val loginViewModel = viewModel<LoginViewModel>()
         val state = loginViewModel.state
         val context = LocalContext.current
+
+        var userTokenDtoState = remember {
+            mutableStateOf("")
+        }
         LaunchedEffect(key1 = context ) {
             loginViewModel.validationEvents.collect { event ->
                 when(event) {
@@ -126,8 +137,31 @@ fun LoginScreen() {
             Row {
                 Button(
                     onClick = {
-                        NeedlesSignalsAppRouter.navigateTo(Screen.HomeScreen)
-//                        loginViewModel.onEvent(LoginFormEvent.Submit)
+                        var user = UserLogin(
+                            state.email,
+                            state.password,
+                        )
+
+                        var call = RetrofitFactory().setRegister().login(user)
+                        call.enqueue(object : Callback<UserTokenDto> {
+                            override fun onResponse(
+                                call: Call<UserTokenDto>,
+                                response: Response<UserTokenDto>
+                            ) {
+                                var response = response.body()!!
+                                userTokenDtoState.value = response.token.toString()
+                                if (userTokenDtoState.value.isNotBlank()) {
+                                    NeedlesSignalsAppRouter.navigateTo(Screen.HomeScreen)
+
+                                }
+                                Log.i("LOGIN", "onResponse: ${userTokenDtoState.value}")
+                            }
+
+                            override fun onFailure(call: Call<UserTokenDto>, t: Throwable) {
+                                Log.i("FIAP", "onResponse: ${t.message}")
+                            }
+
+                        })
                     },
                     elevation = ButtonDefaults.buttonElevation(2.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
